@@ -34,7 +34,7 @@ ADD jobs/cron.hourly /etc/cron.hourly
 ADD jobs/cron.daily /etc/cron.daily
 ADD jobs/cron.monthly /etc/cron.monthly
 
-ENV LANG=zh_CN.UTF-8
+ENV LANG=C.UTF-8
 
 RUN mkdir -p /data/logs && ls /data/stock/ && chmod 755 /data/stock/jobs/run_* &&  \
     chmod 755 /etc/cron.minutely/* && chmod 755 /etc/cron.hourly/* && \
