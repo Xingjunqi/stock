@@ -70,7 +70,7 @@ def stat_all_lite_sell(tmp_datetime):
         del_sql = " DELETE FROM `stock_data`.`guess_indicators_lite_sell_daily` WHERE `date`= '%s' " % datetime_int
         common.insert(del_sql)
     except Exception as e:
-        print("error :", e)
+        print("delete sell data error :", e)
 
     data = pd.read_sql(sql=sql_1, con=common.engine(), params=[datetime_int])
     data = data.drop_duplicates(subset="code", keep="last")
@@ -95,13 +95,17 @@ def stat_all_batch(tmp_datetime):
     except Exception as e:
         print("error :", e)
 
+    # sql_count = """
+    # SELECT count(1) FROM stock_data.ts_today_all WHERE `date` = %s and `trade` > 0 and `open` > 0 and trade <= 20
+    #              and `code` not like %s and `name` not like %s
+    # """
+    # 20210404修改股票当天信息获取表
     sql_count = """
-    SELECT count(1) FROM stock_data.ts_today_all WHERE `date` = %s and `trade` > 0 and `open` > 0 and trade <= 20 
-                 and `code` not like %s and `name` not like %s
-    """
+        SELECT count(1) FROM stock_data.ts_today_all WHERE `date` = %s and `trade` > 0 and `open` > 0  
+        """
     # 修改逻辑，增加中小板块计算。 中小板：002，创业板：300 。and `code` not like %s and `code` not like %s and `name` not like %s
     # count = common.select_count(sql_count, params=[datetime_int, '002%', '300%', '%st%'])
-    count = common.select_count(sql_count, params=[datetime_int, '300%', '%st%'])
+    count = common.select_count(sql_count, params=[datetime_int])
     print("count :", count)
     batch_size = 100
     end = int(math.ceil(float(count) / batch_size) * batch_size)
@@ -112,13 +116,13 @@ def stat_all_batch(tmp_datetime):
         # #`code` not like '002%' and `code` not like '300%'  and `name` not like '%st%'
         sql_1 = """ 
                     SELECT `date`, `code`, `name`, `changepercent`, `trade`, `open`, `high`, `low`, 
-                        `settlement`, `volume`, `turnoverratio`, `amount`, `per`, `pb`, `mktcap`, `nmc` 
-                    FROM stock_data.ts_today_all WHERE `date` = %s and `trade` > 0 and `open` > 0 and trade <= 20 
-                        and `code` not like %s and `name` not like %s limit %s , %s
+                        `settlement`, `volume`, `turnoverratio`, `amount`, `per`, `pb`, `mktcap`, `nmc`
+                    FROM stock_data.ts_today_all WHERE `date` = %s and `trade` > 0 and `open` > 0  
+                         limit %s , %s
                     """
         print(sql_1)
         # data = pd.read_sql(sql=sql_1, con=common.engine(), params=[datetime_int, '002%', '300%', '%st%', i, batch_size])
-        data = pd.read_sql(sql=sql_1, con=common.engine(), params=[datetime_int, '300%', '%st%', i, batch_size])
+        data = pd.read_sql(sql=sql_1, con=common.engine(), params=[datetime_int, i, batch_size])
         data = data.drop_duplicates(subset="code", keep="last")
         print("########data[trade]########:", len(data))
         stat_index_all(data, i)
