@@ -8,6 +8,8 @@ import numpy as np
 import math
 import datetime
 import stockstats
+import time
+import tushare as ts
 
 
 ### 对每日指标数据，进行筛选。将符合条件的。二次筛选出来。
@@ -336,11 +338,16 @@ def apply_guess(tmp, stock_column):
 
 # main函数入口
 if __name__ == '__main__':
-    # 使用方法传递。
-    tmp_datetime = common.run_with_args(stat_all_batch)
-    # 二次筛选数据。直接计算买卖股票数据。
-    tmp_datetime = common.run_with_args(stat_all_lite_buy)
-    tmp_datetime = common.run_with_args(stat_all_lite_sell)
+    end = time.strftime("%Y%m%d", time.localtime())
+    pro = ts.pro_api('3fe9e5e0002db1ae4a43f4a7b59989ae375408a59ac7802844df2c49')
+    data = pro.daily(start_date=end, end_date=end)
+    print("guess indicators daily job : ", end)
+    if not data.empty:
+        # 使用方法传递。
+        tmp_datetime = common.run_with_args(stat_all_batch)
+        # 二次筛选数据。直接计算买卖股票数据。
+        tmp_datetime = common.run_with_args(stat_all_lite_buy)
+        tmp_datetime = common.run_with_args(stat_all_lite_sell)
 
 
 ####################### 老方法，弃用了。#######################
