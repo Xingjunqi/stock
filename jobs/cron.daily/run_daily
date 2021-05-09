@@ -20,6 +20,10 @@ echo "###################"$DATETIME"###################" >> /data/logs/daily.${D
 /usr/local/bin/python3 /data/stock/jobs/18h_daily_job.py >> /data/logs/daily.${DATE}.log
 
 echo "###################"$DATETIME"###################" >> /data/logs/daily.${DATE}.log
+#增加获得今日全部数据和大盘数据
+/usr/local/bin/python3 /data/stock/jobs/daily_job_stock_info.py >> /data/logs/daily.${DATE}.log
+
+echo "###################"$DATETIME"###################" >> /data/logs/daily.${DATE}.log
 #使用股票指标预测。
 /usr/local/bin/python3 /data/stock/jobs/guess_indicators_daily_job.py >> /data/logs/daily.${DATE}.log
 
