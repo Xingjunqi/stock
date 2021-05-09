@@ -1,9 +1,11 @@
 import tushare as ts
 import datetime
 import libs.common as common
+import time
 
 if __name__ == '__main__':
     pro=ts.pro_api('3fe9e5e0002db1ae4a43f4a7b59989ae375408a59ac7802844df2c49');
+    print('daily_job_stock_info process start time : ', time.strftime("%Y%m%d %H:%M:%S", time.localtime()))
 
     # 接着最后一次刷新股票每日信息
     max_date_sql = "select MAX(trade_date) from ts_stock_info"
@@ -16,6 +18,7 @@ if __name__ == '__main__':
         startdate += datetime.timedelta(days=1)
         start = startdate.__str__().replace('-', '')[0:8]
         data = pro.daily(start_date=start, end_date=start)
-        common.insert_db(data, "ts_stock_info", False, "ts_code,trade_date")
+        # common.insert_db(data, "ts_stock_info", False, "ts_code,trade_date")
         print('daily_job_stock_info process date : %s' % (start))
         print(data)
+    print('daily_job_stock_info process end time : ', time.strftime("%Y%m%d %H:%M:%S", time.localtime()))

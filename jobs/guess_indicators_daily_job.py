@@ -338,6 +338,7 @@ def apply_guess(tmp, stock_column):
 
 # main函数入口
 if __name__ == '__main__':
+    print('guess_indicators_daily_job process start time : ', time.strftime("%Y%m%d %H:%M:%S", time.localtime()))
     end = time.strftime("%Y%m%d", time.localtime())
     pro = ts.pro_api('3fe9e5e0002db1ae4a43f4a7b59989ae375408a59ac7802844df2c49')
     data = pro.daily(start_date=end, end_date=end)
@@ -348,6 +349,7 @@ if __name__ == '__main__':
         # 二次筛选数据。直接计算买卖股票数据。
         tmp_datetime = common.run_with_args(stat_all_lite_buy)
         tmp_datetime = common.run_with_args(stat_all_lite_sell)
+    print('guess_indicators_daily_job process end time : ', time.strftime("%Y%m%d %H:%M:%S", time.localtime()))
 
 
 ####################### 老方法，弃用了。#######################

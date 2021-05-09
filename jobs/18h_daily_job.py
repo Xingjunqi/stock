@@ -77,6 +77,8 @@ def stat_today_all(tmp_datetime):
 
 # main函数入口
 if __name__ == '__main__':
+    print('18h_daily_job process start time : ', time.strftime("%Y%m%d %H:%M:%S", time.localtime()))
+    time.sleep(5400)
     end = time.strftime("%Y%m%d", time.localtime())
     pro = ts.pro_api('3fe9e5e0002db1ae4a43f4a7b59989ae375408a59ac7802844df2c49')
     data = pro.daily(start_date=end, end_date=end)
@@ -86,3 +88,4 @@ if __name__ == '__main__':
         tmp_datetime = common.run_with_args(stat_index_all)
         time.sleep(5)  # 停止5秒
         tmp_datetime = common.run_with_args(stat_today_all)
+    print('18h_daily_job process end time : ', time.strftime("%Y%m%d %H:%M:%S", time.localtime()))
